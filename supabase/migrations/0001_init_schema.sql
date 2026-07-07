@@ -505,10 +505,35 @@ drop policy if exists "payments_select_own" on public.payments;
 create policy "payments_select_own" on public.payments
   for select using (auth.uid() = owner_id);
 
--- ---- ACTIVITY LOGS (read-only for clients — written by triggers/backend) ----
+drop policy if exists "payments_insert_backoffice" on public.payments;
+create policy "payments_insert_backoffice" on public.payments
+  for insert with check (auth.uid() = owner_id);
+
+-- ---- ACTIVITY LOGS (read/write for clients and backend) ----
 drop policy if exists "activity_logs_select_own" on public.activity_logs;
 create policy "activity_logs_select_own" on public.activity_logs
   for select using (auth.uid() = owner_id);
+
+drop policy if exists "activity_logs_insert_own" on public.activity_logs;
+create policy "activity_logs_insert_own" on public.activity_logs
+  for insert with check (auth.uid() = owner_id);
+
+-- ---- NOTIFICATIONS (read/write for clients and backend) ----
+drop policy if exists "notifications_select_own" on public.notifications;
+create policy "notifications_select_own" on public.notifications
+  for select using (auth.uid() = owner_id);
+
+drop policy if exists "notifications_insert_own" on public.notifications;
+create policy "notifications_insert_own" on public.notifications
+  for insert with check (auth.uid() = owner_id);
+
+drop policy if exists "notifications_update_own" on public.notifications;
+create policy "notifications_update_own" on public.notifications
+  for update using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
+
+drop policy if exists "notifications_delete_own" on public.notifications;
+create policy "notifications_delete_own" on public.notifications
+  for delete using (auth.uid() = owner_id);
 
 -- =====================================================================
 -- END OF MODULE 2

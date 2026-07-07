@@ -5,10 +5,14 @@ import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/features/auth/pages/ResetPasswordPage";
 import VerifyEmailPage from "@/features/auth/pages/VerifyEmailPage";
 import { ProtectedRoute, PublicOnlyRoute } from "@/features/auth/ProtectedRoute";
-import DashboardPlaceholderPage from "@/pages/DashboardPlaceholderPage";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardPage from "@/pages/DashboardPage";
+import ProjectsPage from "@/pages/ProjectsPage";
+import TasksListPage from "@/pages/tasks/TasksListPage";
+import TaskDetailsPage from "@/pages/tasks/TaskDetailsPage";
+import ProjectsListPage from "@/pages/projects/ProjectsListPage";
+import ProjectDetailsPage from "@/pages/projects/ProjectDetailsPage";
 
-// NOTE: Dashboard/Projects/Tasks/etc. routes will be nested under the
-// ProtectedRoute below, module by module, replacing DashboardPlaceholderPage.
 function App() {
   return (
     <Routes>
@@ -29,7 +33,13 @@ function App() {
 
       {/* Protected app routes */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<DashboardPlaceholderPage />} />
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/projects" element={<ProjectsListPage />} />
+          <Route path="/dashboard/projects/:id" element={<ProjectDetailsPage />} />
+          <Route path="/dashboard/tasks" element={<TasksListPage />} />
+          <Route path="/dashboard/tasks/:id" element={<TaskDetailsPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

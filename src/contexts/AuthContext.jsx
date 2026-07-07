@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
     if (!userId) {
       setProfile(null);
       return;
-    }
+    }  
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
