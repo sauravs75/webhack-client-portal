@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
-export default function TaskSearch({ onSearch }) {
-  const [q, setQ] = useState("");
+export default function TaskSearch({ value = "", onChange, onSearch, placeholder = "Search tasks" }) {
   return (
-    <div className="flex items-center gap-2">
-      <input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search tasks..."
-        className="rounded-md border px-2 py-1"
+    <div className="relative">
+      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        value={value}
+        onChange={(e) => {
+          onChange?.(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") onSearch?.(e.target.value);
+        }}
+        placeholder={placeholder}
+        className="pl-9"
       />
-      <button className="rounded-md bg-primary px-3 py-1 text-white" onClick={() => onSearch?.(q)}>
-        Search
-      </button>
     </div>
   );
 }

@@ -1,33 +1,75 @@
-import React from "react";
-import TaskStatusBadge from "./TaskStatusBadge";
-import TaskPriorityBadge from "./TaskPriorityBadge";
 import { Link } from "react-router-dom";
+import { CalendarDays, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import TaskStatusBadge from "./TaskStatusBadge";
+import TaskProgressBar from "./TaskProgressBar";
+import TaskPriorityBadge from "./TaskPriorityBadge";
+import { formatDate } from "@/lib/utils";
 
-export default function TaskTable({ tasks }) {
+export default function TaskTable({ tasks, onEdit, onDelete }) {
   return (
-    <div className="overflow-auto rounded-lg border border-border/70 bg-card/80">
-      <table className="w-full table-auto">
-        <thead>
-          <tr>
-            <th className="text-left p-3">Title</th>
-            <th className="text-left p-3">Project</th>
-            <th className="text-left p-3">Priority</th>
-            <th className="text-left p-3">Status</th>
-            <th className="text-left p-3">Progress</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="overflow-hidden rounded-2xl border border-border/70 bg-card/80">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Task</TableHead>
+            <TableHead>Project</TableHead>
+            <TableHead>Priority</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Progress</TableHead>
+            <TableHead>Deadline</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {tasks.map((t) => (
-            <tr key={t.id} className="border-t">
-              <td className="p-3"><Link to={`/dashboard/tasks/${t.id}`}>{t.title}</Link></td>
-              <td className="p-3">{t.project?.name ?? "-"}</td>
-              <td className="p-3"><TaskPriorityBadge priority={t.priority} /></td>
-              <td className="p-3"><TaskStatusBadge status={t.status} /></td>
-              <td className="p-3">{t.progress}%</td>
-            </tr>
+            <TableRow key={t.id}>
+              <TableCell>
+                <div>
+                  <p className="font-medium truncate">{t.title}</p>
+                  <p className="text-sm text-muted-foreground">{t.description ? String(t.description).slice(0, 80) : "No description"}</p>
+                </div>
+              </TableCell>
+              <TableCell>{t.project?.name ?? "-"}</TableCell>
+              <TableCell><TaskPriorityBadge priority={t.priority} /></TableCell>
+              <TableCell><TaskStatusBadge status={t.status} /></TableCell>
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  <div className="text-sm text-muted-foreground">Progress</div>
+                  <div className="flex items-center gap-2">
+                    <TaskProgressBar value={t.progress || 0} />
+                    <div className="font-medium">{t.progress ?? 0}%</div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CalendarDays className="h-4 w-4" />
+                  {t.deadline ? formatDate(t.deadline) : "—"}
+                </div>
+              </TableCell>
+              <TableCell className="text-right">
+                <div className="flex justify-end gap-2">
+                  <Button asChild size="sm" variant="outline">
+                    <Link to={`/dashboard/tasks/${t.id}`}>View</Link>
+                  </Button>
+                  {onEdit ? (
+                    <Button size="sm" variant="outline" onClick={() => onEdit(t)}>
+                      Edit
+                    </Button>
+                  ) : null}
+                  {onDelete ? (
+                    <Button size="sm" variant="destructive" onClick={() => onDelete(t)}>
+                      Delete
+                    </Button>
+                  ) : null}
+                </div>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

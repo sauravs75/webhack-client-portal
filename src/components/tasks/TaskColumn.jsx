@@ -1,7 +1,8 @@
 import React from "react";
-import TaskCard from "./TaskCard";
+// import TaskCard from "./TaskCard";
+import TaskListItem from "./TaskListItem";
 
-export default function TaskColumn({ column, tasks = [], onDrop }) {
+export default function TaskColumn({ column, tasks = [], onDrop, onEdit, onDelete }) {
   const allowDrop = (e) => e.preventDefault();
   const handleDrop = (e) => { e.preventDefault(); onDrop(e, column.key); };
 
@@ -11,7 +12,7 @@ export default function TaskColumn({ column, tasks = [], onDrop }) {
       <div className="space-y-2">
         {tasks.map((t) => (
           <div key={t.id} draggable onDragStart={(e) => e.dataTransfer.setData("text/plain", t.id)}>
-            <TaskCard task={t} />
+            <TaskListItem task={t} onEdit={onEdit} onDelete={onDelete} />
           </div>
         ))}
       </div>

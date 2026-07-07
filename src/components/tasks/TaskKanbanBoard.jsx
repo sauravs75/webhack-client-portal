@@ -10,7 +10,7 @@ const columns = [
   { key: "done", title: "Done" },
 ];
 
-export default function TaskKanbanBoard({ tasks = [] }) {
+export default function TaskKanbanBoard({ tasks = [], onEdit, onDelete }) {
   const qc = useQueryClient();
   const grouped = columns.reduce((acc, col) => ({ ...acc, [col.key]: [] }), {});
   tasks.forEach((t) => grouped[t.status || "todo" ]?.push(t));
@@ -30,7 +30,7 @@ export default function TaskKanbanBoard({ tasks = [] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {columns.map((col) => (
-        <TaskColumn key={col.key} column={col} tasks={grouped[col.key] || []} onDrop={onDrop} />
+        <TaskColumn key={col.key} column={col} tasks={grouped[col.key] || []} onDrop={onDrop} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </div>
   );

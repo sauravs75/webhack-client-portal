@@ -1,15 +1,22 @@
-import React from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export default function TaskFilters({ onChange }) {
+export default function TaskFilters({ status = "all", onStatusChange }) {
   return (
-    <div className="flex items-center gap-2">
-      <select onChange={(e) => onChange?.({ status: e.target.value })} className="rounded-md border px-2 py-1">
-        <option value="all">All statuses</option>
-        <option value="todo">Todo</option>
-        <option value="in_progress">In Progress</option>
-        <option value="in_review">In Review</option>
-        <option value="done">Done</option>
-      </select>
+    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Select value={status} onValueChange={onStatusChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="All statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="todo">Todo</SelectItem>
+            <SelectItem value="in_progress">In Progress</SelectItem>
+            <SelectItem value="in_review">In Review</SelectItem>
+            <SelectItem value="done">Done</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 }

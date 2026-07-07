@@ -1,6 +1,6 @@
 import { supabase } from "@/supabase/client";
 
-const TASK_SELECT = `id, owner_id, project_id, title, description, priority, status, deadline, completed_percent, progress, created_at, updated_at, projects(id, name)`;
+const TASK_SELECT = `id, owner_id, project_id, title, description, priority, status, deadline, completed_percent, created_at, updated_at, projects(id, name)`;
 
 function normalizeTaskPayload(values) {
   return {
@@ -25,7 +25,10 @@ export async function getTasks(filters = {}) {
   const { data, error } = await query;
   if (error) throw error;
 
-  const tasks = (data ?? []).filter((task) => {
+  // normalize progress field for UI compatibility (some DBs use completed_percent)
+  const normalizedData = (data ?? []).map((t) => ({ ...t, progress: Number(t.completed_percent ?? 0) }));
+
+  const tasks = (normalizedData ?? []).filter((task) => {
     const term = (search || "").toLowerCase();
     if (!term) return true;
     return [task.title, task.description, task.status, task.priority, task.projects?.name]
@@ -74,6 +77,8 @@ export async function getTask(taskId) {
     .single();
 
   if (error) throw error;
+  // expose `progress` for UI components
+  if (data) data.progress = Number(data.completed_percent ?? 0);
   return data;
 }
 
@@ -150,11 +155,19 @@ export async function createTaskComment(taskId, content) {
 }
 
 async function createActivityLog({ ownerId, action, entityType, entityId, description }) {
-  const { error } = await supabase.from("activity_logs").insert({ owner_id: ownerId, action, entity_type: entityType, entity_id: entityId, description });
-  if (error) throw error;
+  try {
+    const { error } = await supabase.from("activity_logs").insert({ owner_id: ownerId, action, entity_type: entityType, entity_id: entityId, description });
+    if (error) console.error("createActivityLog error:", error);
+  } catch (err) {
+    console.error("createActivityLog exception:", err);
+  }
 }
 
 async function createNotification({ ownerId, type, title, message, relatedId, relatedType }) {
-  const { error } = await supabase.from("notifications").insert({ owner_id: ownerId, type, title, message, related_id: relatedId, related_type: relatedType });
-  if (error) throw error;
+  try {
+    const { error } = await supabase.from("notifications").insert({ owner_id: ownerId, type, title, message, related_id: relatedId, related_type: relatedType });
+    if (error) console.error("createNotification error:", error);
+  } catch (err) {
+    console.error("createNotification exception:", err);
+  }
 }
