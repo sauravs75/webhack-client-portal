@@ -4,7 +4,8 @@ import { CalendarDays } from "lucide-react";
 import { MEETING_STATUS_LABELS } from "@/features/meetings/schemas";
 import { cn } from "@/lib/utils";
 
-function getDays(view) {
+function getDays(view) {   
+  
   const today = startOfDay(new Date());
   if (view === "day") return [today];
   const start = view === "week" ? startOfWeek(today) : startOfWeek(startOfMonth(today));
