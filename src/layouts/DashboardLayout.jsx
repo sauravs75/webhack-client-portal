@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { LayoutGrid, FolderKanban, CheckSquare, Moon, Sun, LogOut, Menu, Sparkles, X } from "lucide-react";
+import { LayoutGrid, FolderKanban, CheckSquare, FileText, CalendarDays, Moon, Sun, LogOut, Menu, Sparkles, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,8 @@ const navItems = [
   { to: "/dashboard", label: "Overview", icon: LayoutGrid },
   { to: "/dashboard/projects", label: "Projects", icon: FolderKanban },
   { to: "/dashboard/tasks", label: "Tasks", icon: CheckSquare },
+  { to: "/dashboard/documents", label: "Documents", icon: FileText },
+  { to: "/dashboard/meetings", label: "Meetings", icon: CalendarDays },
 ];
 
 export default function DashboardLayout() {

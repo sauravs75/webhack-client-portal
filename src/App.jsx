@@ -7,7 +7,10 @@ import VerifyEmailPage from "@/features/auth/pages/VerifyEmailPage";
 import { ProtectedRoute, PublicOnlyRoute } from "@/features/auth/ProtectedRoute";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import DashboardPage from "@/pages/DashboardPage";
-import ProjectsPage from "@/pages/ProjectsPage";
+import DocumentsPage from "@/pages/documents/DocumentsPage";
+import DocumentDetailsPage from "@/pages/documents/DocumentDetailsPage";
+import MeetingsPage from "@/pages/meetings/MeetingsPage";
+import MeetingDetailsPage from "@/pages/meetings/MeetingDetailsPage";
 import TasksListPage from "@/pages/tasks/TasksListPage";
 import TaskDetailsPage from "@/pages/tasks/TaskDetailsPage";
 import ProjectsListPage from "@/pages/projects/ProjectsListPage";
@@ -39,6 +42,10 @@ function App() {
           <Route path="/dashboard/projects/:id" element={<ProjectDetailsPage />} />
           <Route path="/dashboard/tasks" element={<TasksListPage />} />
           <Route path="/dashboard/tasks/:id" element={<TaskDetailsPage />} />
+          <Route path="/dashboard/documents" element={<DocumentsPage />} />
+          <Route path="/dashboard/documents/:id" element={<DocumentDetailsPage />} />
+          <Route path="/dashboard/meetings" element={<MeetingsPage />} />
+          <Route path="/dashboard/meetings/:id" element={<MeetingDetailsPage />} />
         </Route>
       </Route>
 
