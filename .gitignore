@@ -21,3 +21,11 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+supabase/.git/
+supabase/migrations/
+supabase/.cache/
+supabase
